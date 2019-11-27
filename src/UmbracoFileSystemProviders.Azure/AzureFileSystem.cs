@@ -211,7 +211,7 @@ namespace Our.Umbraco.FileSystemProviders.Azure
         /// </summary>
         public string ApplicationVirtualPath { get; internal set; } = HttpRuntime.AppDomainAppVirtualPath;
 
-        public bool CanAddPhysical => throw new NotImplementedException();
+        public bool CanAddPhysical => true;
 
         /// <summary>
         /// Returns a singleton instance of the <see cref="AzureFileSystem"/> class.
@@ -344,8 +344,16 @@ namespace Our.Umbraco.FileSystemProviders.Azure
         /// <inheritdoc/>
         public void AddFile(string path, string physicalPath, bool overrideIfExists = true, bool copy = false)
         {
-            //Valid as the property 'CanAddPhysical' is not implemented either
-            throw new NotImplementedException();
+            var fullPath = GetFullPath(path);
+
+            Current.Logger.Debug<AzureBlobFileSystem>($"AddFile(path, physicalPath, overrideIfExists, copy) method executed with path:{path}, {physicalPath}, {overrideIfExists}, {copy} - fullPath: {fullPath}");
+
+            //as far as I can tell the copy parameter is of no consequence 
+            using (var fs = File.OpenRead(physicalPath))
+            {
+                AddFile(path, fs, overrideIfExists);
+            }
+
         }
 
         /// <summary>

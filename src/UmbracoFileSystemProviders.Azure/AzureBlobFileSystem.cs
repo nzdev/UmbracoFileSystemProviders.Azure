@@ -159,7 +159,7 @@ namespace Our.Umbraco.FileSystemProviders.Azure
         /// </summary>
         public AzureFileSystem FileSystem { get; }
 
-        public bool CanAddPhysical => throw new NotImplementedException();
+        public bool CanAddPhysical => true;
 
         /// <summary>
         /// Adds a file to the file system.
